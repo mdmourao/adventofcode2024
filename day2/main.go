@@ -16,6 +16,41 @@ func Abs(x int) int {
 	return x
 }
 
+func remove(s []int, index int) []int {
+	ret := make([]int, 0)
+	ret = append(ret, s[:index]...)
+	return append(ret, s[index+1:]...)
+}
+
+func isValid(report []int) bool {
+	var countIsIncreasing = 0
+	var countIsDecreasing = 0
+
+	for i := 0; i < len(report)-1; i++ {
+		if report[i+1] > report[i] {
+			countIsIncreasing++
+		}
+	}
+
+	for i := 0; i < len(report)-1; i++ {
+		if report[i+1] < report[i] {
+			countIsDecreasing++
+		}
+	}
+
+	if countIsDecreasing == len(report)-1 || countIsIncreasing == len(report)-1 {
+		for i := 0; i < len(report)-1; i++ {
+			var diff = Abs(report[i] - report[i+1])
+			if diff <= 0 || diff > 3 {
+				return false
+			}
+		}
+	} else {
+		return false
+	}
+	return true
+}
+
 func main() {
 	if len(os.Args) < 2 {
 		log.Fatal("Usage: go run main.go <input_file>")
@@ -57,46 +92,30 @@ func main() {
 	}
 
 	var validReportsCount = 0
-	fmt.Println(reports)
 	for _, report := range reports {
-		var isValid = true
-		var countIsIncreasing = 0
-		var countIsDecreasing = 0
+		if isValid(report) {
+			validReportsCount++
+		}
+	}
 
-		for i := 0; i < len(report)-1; i++ {
-			if report[i+1] > report[i] {
-				countIsIncreasing++
+	fmt.Println("P1", validReportsCount)
+
+	// Part 2
+	validReportsCount = 0
+	for _, report := range reports {
+		var validCount = 0
+		for i := range report {
+			var newArrayToEvaluate = remove(report, i)
+			if isValid(newArrayToEvaluate) {
+				validCount++
 			}
 		}
 
-		for i := 0; i < len(report)-1; i++ {
-			if report[i+1] < report[i] {
-				countIsDecreasing++
-			}
-		}
-
-		fmt.Println(report, countIsIncreasing, countIsDecreasing)
-
-		if countIsDecreasing == len(report)-1 || countIsIncreasing == len(report)-1 {
-			for i := 0; i < len(report)-1; i++ {
-				var diff = Abs(report[i] - report[i+1])
-				if diff <= 0 || diff > 3 {
-					isValid = false
-					break
-				}
-			}
-		} else {
-			isValid = false
-		}
-
-		fmt.Println(report, isValid)
-
-		if isValid {
+		if validCount > 0 {
 			validReportsCount++
 		}
 
 	}
 
-	fmt.Println("P1", validReportsCount)
-
+	fmt.Println("P2", validReportsCount)
 }
