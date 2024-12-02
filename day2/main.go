@@ -30,25 +30,22 @@ func isValid(report []int) bool {
 		if report[i+1] > report[i] {
 			countIsIncreasing++
 		}
-	}
 
-	for i := 0; i < len(report)-1; i++ {
 		if report[i+1] < report[i] {
 			countIsDecreasing++
+		}
+
+		var diff = Abs(report[i] - report[i+1])
+		if diff <= 0 || diff > 3 {
+			return false
 		}
 	}
 
 	if countIsDecreasing == len(report)-1 || countIsIncreasing == len(report)-1 {
-		for i := 0; i < len(report)-1; i++ {
-			var diff = Abs(report[i] - report[i+1])
-			if diff <= 0 || diff > 3 {
-				return false
-			}
-		}
+		return true
 	} else {
 		return false
 	}
-	return true
 }
 
 func main() {
