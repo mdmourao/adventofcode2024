@@ -84,7 +84,6 @@ func main() {
 
 			report = append(report, intValue)
 		}
-
 		reports[i] = report
 	}
 
@@ -100,18 +99,13 @@ func main() {
 	// Part 2
 	validReportsCount = 0
 	for _, report := range reports {
-		var validCount = 0
 		for i := range report {
 			var newArrayToEvaluate = remove(report, i)
 			if isValid(newArrayToEvaluate) {
-				validCount++
+				validReportsCount++
+				break
 			}
 		}
-
-		if validCount > 0 {
-			validReportsCount++
-		}
-
 	}
 
 	fmt.Println("P2", validReportsCount)
